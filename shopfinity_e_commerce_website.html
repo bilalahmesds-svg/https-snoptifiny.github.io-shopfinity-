@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shopfinity — Online Store</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--blue:#005BFF;--white:#fff;--gray:#666;--light:#f5f5f7;--dark:#111}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
+    body{background:var(--white);color:var(--dark);line-height:1.5}
+    header{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid #eee;position:sticky;top:0;background:var(--white);z-index:100}
+    header .logo{font-weight:800;font-size:22px;color:var(--blue)}
+    nav a{margin-left:18px;text-decoration:none;font-weight:600;color:var(--dark)}
+    .btn{padding:10px 16px;border-radius:10px;background:var(--blue);color:var(--white);border:0;font-weight:600;cursor:pointer}
+    .container{max-width:1150px;margin:auto;padding:24px}
+
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:center;margin-top:40px}
+    .hero img{width:100%;border-radius:12px;object-fit:cover}
+    .hero h1{font-size:44px;font-weight:800;margin-bottom:14px}
+    .hero p{color:var(--gray);margin-bottom:20px}
+
+    /* Products Grid */
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:40px}
+    .product-card{border:1px solid #eee;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;background:var(--white)}
+    .product-card img{width:100%;height:180px;object-fit:cover}
+    .product-card .body{padding:12px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+    .product-card h3{font-size:18px;margin-bottom:6px}
+    .product-card p{font-size:14px;color:var(--gray);margin-bottom:8px}
+    .product-card .price{font-weight:700;color:var(--blue);margin-bottom:8px}
+
+    /* Cart */
+    .cart{position:fixed;right:18px;bottom:18px;width:340px;max-width:92%;background:var(--white);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,0.12);padding:12px;z-index:50}
+    .cart h3{margin-bottom:8px}
+    .cart-list{max-height:260px;overflow:auto;margin-bottom:10px}
+    .cart-item{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed #eee}
+    .cart-item img{width:52px;height:52px;border-radius:8px;object-fit:cover}
+    .cart-total{display:flex;justify-content:space-between;align-items:center;padding-top:8px;font-weight:700}
+    .cart button{padding:6px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+    .cart .whatsapp{background:#25D366;color:white;flex:1;display:flex;align-items:center;justify-content:center;font-weight:800}
+
+    footer{margin-top:36px;padding:26px 0;border-top:1px solid #f0f0f0;text-align:center;color:var(--gray)}
+
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .cart{left:18px;right:18px;width:auto}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Shopfinity</div>
+    <nav>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+      <button class="btn" id="orderNowBtn">Cart</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h1>Buy What You Love — At Best Prices</h1>
+        <p>Discover amazing products and shop online with easy checkout and secure payment. Explore our featured items now.</p>
+        <button class="btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+      </div>
+      <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900" alt="Online store banner">
+    </section>
+
+    <!-- Products -->
+    <section id="products" class="products-grid">
+      <!-- JS will inject products here -->
+    </section>
+
+    <!-- Contact -->
+    <footer id="contact">
+      <h3>Contact & Support</h3>
+      <p>Email: support@shopfinity.example | WhatsApp: +92 300 0000000</p>
+    </footer>
+  </main>
+
+  <!-- Cart -->
+  <div class="cart" id="cartBox">
+    <h3>Your Cart</h3>
+    <div class="cart-list" id="cartList">Cart is empty.</div>
+    <div class="cart-total">
+      <div>Total</div>
+      <div id="cartTotal">Rs 0</div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button id="clearCart" style="flex:1">Clear</button>
+      <button class="whatsapp" id="placeOrder">Order via WhatsApp</button>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      {id:1,name:'Smartphone X',desc:'Latest 2025 model',price:55000,img:'https://images.unsplash.com/photo-1580910051078-c2ed2b94fa3e?w=500&auto=format&fit=crop'},
+      {id:2,name:'Wireless Headphones',desc:'Noise cancelling',price:8000,img:'https://images.unsplash.com/photo-1580894732444-45e2f9a1a1f3?w=500&auto=format&fit=crop'},
+      {id:3,name:'Running Shoes',desc:'Comfortable & Stylish',price:12000,img:'https://images.unsplash.com/photo-1600185360311-0a1e5a5f0e21?w=500&auto=format&fit=crop'},
+      {id:4,name:'Smartwatch Pro',desc:'Track fitness & health',price:15000,img:'https://images.unsplash.com/photo-1571781921422-c5d3ed0ff29f?w=500&auto=format&fit=crop'},
+      {id:5,name:'Backpack',desc:'Durable & Lightweight',price:4000,img:'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500&auto=format&fit=crop'}
+    ];
+
+    let cart=[];
+    const toRs=v=>`Rs ${v}`;
+    const findProduct=id=>products.find(p=>p.id===id);
+
+    function renderProducts(){
+      const grid=document.getElementById('products');
+      products.forEach(p=>{
+        const card=document.createElement('div');
+        card.className='product-card';
+        card.innerHTML=`
+          <img src="${p.img}" alt="${p.name}">
+          <div class="body">
+            <h3>${p.name}</h3>
+            <p>${p.desc}</p>
+            <div class="price">${toRs(p.price)}</div>
+            <button class="btn" data-id="${p.id}">Add to Cart</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      document.querySelectorAll('.product-card .btn').forEach(b=>b.addEventListener('click',ev=>{
+        const id=Number(ev.currentTarget.dataset.id);
+        addToCart(id);
+      }));
+    }
+
+    function addToCart(id){
+      const item=cart.find(c=>c.id===id);
+      if(item)item.qty+=1; else cart.push({id,qty:1});
+      renderCart();
+    }
+
+    function renderCart(){
+      const list=document.getElementById('cartList');
+      const totalEl=document.getElementById('cartTotal');
+      if(cart.length===0){list.innerHTML='Cart is empty.';totalEl.textContent='Rs 0';return;}
+      list.innerHTML='';
+      let sum=0;
+      cart.forEach(ci=>{
+        const p=findProduct(ci.id);
+        const itemTotal=p.price*ci.qty; sum+=itemTotal;
+        const row=document.createElement('div');
+        row.className='cart-item';
+        row.innerHTML=`<img src="${p.img}" alt="${p.name}"><div style="flex:1"><strong>${p.name}</strong><br>${ci.qty} × ${toRs(p.price)}</div><div style="text-align:right">${toRs(itemTotal)}<div style="margin-top:6px;display:flex;gap:6px;justify-content:flex-end"><button data-action="dec" data-id="${ci.id}">-</button><button data-action="inc" data-id="${ci.id}">+</button></div></div>`;
+        list.appendChild(row);
+      });
+      totalEl.textContent=toRs(sum);
+      list.querySelectorAll('button[data-action]').forEach(b=>{
+        b.addEventListener('click',()=>{
+          const id=Number(b.dataset.id),a=b.dataset.action;
+          const item=cart.find(c=>c.id===id); if(!item)return;
+          if(a==='inc')item.qty+=1; else item.qty-=1;
+          if(item.qty<=0)cart=cart.filter(c=>c.id!==id);
+          renderCart();
+        })
+      });
+    }
+
+    document.getElementById('placeOrder').addEventListener('click',()=>{
+      if(cart.length===0){alert('Cart is empty');return;}
+      let msg=['Hello, I want to order:'];
+      let sum=0;
+      cart.forEach(ci=>{const p=findProduct(ci.id);msg.push(`${ci.qty} x ${p.name} — Rs ${p.price*ci.qty}`);sum+=p.price*ci.qty;});
+      msg.push(`Total: Rs ${sum}`);
+      msg.push('Name:'); msg.push('Address:');
+      window.open(`https://wa.me/923000000000?text=${encodeURIComponent(msg.join('\n'))}`,'_blank');
+    });
+
+    document.getElementById('clearCart').addEventListener('click',()=>{if(confirm('Clear cart?')){cart=[];renderCart();}});
+    document.getElementById('orderNowBtn').addEventListener('click',()=>{document.getElementById('cartBox').scrollIntoView({behavior:'smooth'});});
+
+    renderProducts(); renderCart();
+  </script>
+</body>
+</html>
